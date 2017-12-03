@@ -8,9 +8,9 @@ public class Camera {
   public enum Movement {NO_MOVEMENT, LEFT, RIGHT, UP, DOWN, FORWARD, BACK};
   
   private static final float DEFAULT_RADIUS = 25;
-  public static final Vec3 DEFAULT_POSITION = new Vec3(0,10,25);
-  public static final Vec3 DEFAULT_POSITION_2 = new Vec3(25,10,0);
-  public static final Vec3 DEFAULT_TARGET = new Vec3(0,0,0);
+  public static final Vec3 DEFAULT_POSITION = new Vec3(0,20,25);
+  public static final Vec3 DEFAULT_POSITION_2 = new Vec3(25,20,0);
+  public static final Vec3 DEFAULT_TARGET = new Vec3(0,5,0);
   public static final Vec3 DEFAULT_UP = new Vec3(0,1,0);
 
   public final float YAW = -90f;

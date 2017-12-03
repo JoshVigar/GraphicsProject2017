@@ -61,7 +61,10 @@ public class Arty extends JFrame implements ActionListener {
       b = new JButton("I position");
       b.addActionListener(this);
       p.add(b);
-	  b = new JButton("A position");
+	  b = new JButton("G position");
+      b.addActionListener(this);
+      p.add(b);
+	  b = new JButton("Reset");
       b.addActionListener(this);
       p.add(b);
 	  b = new JButton("Salute");
@@ -97,16 +100,19 @@ public class Arty extends JFrame implements ActionListener {
       glEventListener.stopAnimation();
     }
     else if (e.getActionCommand().equalsIgnoreCase("V position")) {
-      //glEventListener.Vpos();
+      glEventListener.Vpos();
     }
     else if (e.getActionCommand().equalsIgnoreCase("I position")) {
-      //glEventListener.Ipos();
+      glEventListener.Ipos();
     }
-	else if (e.getActionCommand().equalsIgnoreCase("A position")) {
-      //glEventListener.Apos();
+	else if (e.getActionCommand().equalsIgnoreCase("G position")) {
+      glEventListener.Gpos();
+    }
+	else if (e.getActionCommand().equalsIgnoreCase("Reset")) {
+      glEventListener.reset();
     }
 	else if (e.getActionCommand().equalsIgnoreCase("Salute")) {
-      //glEventListener.salute();
+      glEventListener.salute();
     }
     else if(e.getActionCommand().equalsIgnoreCase("quit"))
       System.exit(0);
