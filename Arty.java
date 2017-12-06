@@ -49,6 +49,12 @@ public class Arty extends JFrame implements ActionListener {
       b = new JButton("camera Z");
       b.addActionListener(this);
       p.add(b);
+	  b = new JButton("Lights off");
+      b.addActionListener(this);
+      p.add(b);
+	  b = new JButton("Lights on");
+      b.addActionListener(this);
+      p.add(b);
       b = new JButton("start");
       b.addActionListener(this);
       p.add(b);
@@ -93,6 +99,12 @@ public class Arty extends JFrame implements ActionListener {
       camera.setCamera(Camera.CameraType.Z);
       canvas.requestFocusInWindow();
     }
+	else if (e.getActionCommand().equalsIgnoreCase("Lights off")) {
+      glEventListener.loff();
+    }
+    else if (e.getActionCommand().equalsIgnoreCase("Lights on")) {
+      glEventListener.lon();
+    }
     else if (e.getActionCommand().equalsIgnoreCase("start")) {
       glEventListener.startAnimation();
     }
@@ -100,19 +112,19 @@ public class Arty extends JFrame implements ActionListener {
       glEventListener.stopAnimation();
     }
     else if (e.getActionCommand().equalsIgnoreCase("V position")) {
-      glEventListener.Vpos();
+      glEventListener.Vpos(90);
     }
     else if (e.getActionCommand().equalsIgnoreCase("I position")) {
-      glEventListener.Ipos();
+      glEventListener.Ipos(90);
     }
 	else if (e.getActionCommand().equalsIgnoreCase("G position")) {
-      glEventListener.Gpos();
+      glEventListener.Gpos(90);
     }
 	else if (e.getActionCommand().equalsIgnoreCase("Reset")) {
       glEventListener.reset();
     }
 	else if (e.getActionCommand().equalsIgnoreCase("Salute")) {
-      glEventListener.salute();
+      glEventListener.salute(20);
     }
     else if(e.getActionCommand().equalsIgnoreCase("quit"))
       System.exit(0);

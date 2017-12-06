@@ -87,7 +87,15 @@ public class Arty_GLEventListener implements GLEventListener {
    
   private boolean animation = false;
   private double savedTime = 0;
-   
+  
+  public void loff() {
+    light.getMaterial().setDiffuse(0,0,0);
+  }
+  
+  public void lon() {
+    light.getMaterial().setDiffuse(0.8f,0.8f,0.8f);
+  }
+  
   public void startAnimation() {
     animation = true;
     startTime = getSeconds()-savedTime;
@@ -99,56 +107,57 @@ public class Arty_GLEventListener implements GLEventListener {
     savedTime = elapsedTime;
   }
   
-  public void Vpos() {
+  public void Vpos(float angle) {
 	reset();
-	curlPinkie(90);
-	curlRing(90);
-	bendFingerZ(middlef1Rotate, 30);
-	bendFingerZ(indexf1Rotate, -30);
-	bendFingerX(thumb1Rotate, 70); 
-	curlThumb(90);
+	curlPinkie(angle);
+	curlRing(angle);
+	bendFingerZ(middlef1Rotate, angle/3f);
+	bendFingerZ(indexf1Rotate, -angle/3f);
+	bendFingerX(thumb1Rotate, angle*0.6f); 
+	curlThumb(angle);
   }
   
-  public void Ipos() {
+  public void Ipos(float angle) {
 	reset();
-	curlRing(90);
-	curlMiddle(90);
-	curlIndex(90);
-	bendFingerX(thumb1Rotate, 70); 
+	curlRing(angle);
+	curlMiddle(angle);
+	curlIndex(angle);
+	bendFingerX(thumb1Rotate, angle*0.6f); 
+	curlThumb(angle);
   }
   
-  public void Gpos() {
+  public void Gpos(float angle) {
 	reset();
-	curlPinkie(90);
-	curlRing(90);
-	bendFingerX(middlef1Rotate, 90); 
-	bendFingerX(indexf1Rotate, 90); 
-	bendFingerX(thumb1Rotate, 70); 
+	curlPinkie(angle);
+	curlRing(angle);
+	bendFingerX(middlef1Rotate, angle); 
+	bendFingerX(indexf1Rotate, angle); 
+	bendFingerX(thumb1Rotate, angle*0.7f); 
   }
   
-  public void salute(){
+  public void salute(float angle){
 	reset();
-	bendFingerZ(indexf1Rotate, -30);
-	bendFingerZ(middlef1Rotate, -30);
-	bendFingerZ(ringf1Rotate, 30);
-	bendFingerZ(pinkief1Rotate, 30);
-	bendFingerZ(thumb1Rotate, -30);
+	bendFingerZ(indexf1Rotate, -angle);
+	bendFingerZ(middlef1Rotate, -angle);
+	bendFingerZ(ringf1Rotate, angle);
+	bendFingerZ(pinkief1Rotate, angle);
+	bendFingerZ(thumb1Rotate, -angle);
   }
   
   //call to bend individual segments in X axis
-  private void bendFingerX(TransformNode joint, int degree) {
+  private void bendFingerX(TransformNode joint, float degree) {
 	joint.setTransform(Mat4Transform.rotateAroundX(degree));
 	joint.update();	 
   }
   
   //call to bend individual segments in the Z axis
-  private void bendFingerZ(TransformNode joint, int degree) {
+  private void bendFingerZ(TransformNode joint, float degree) {
 	joint.setTransform(Mat4Transform.rotateAroundZ(degree));
 	joint.update();	 
   }
   
   //curl all segments of a digit by the same degree in the X axis
-  private void curlPinkie(int degree) {
+  private void curlPinkie(float degree) {
 	pinkief1Rotate.setTransform(Mat4Transform.rotateAroundX(degree));
 	pinkief2Rotate.setTransform(Mat4Transform.rotateAroundX(degree));
 	pinkief3Rotate.setTransform(Mat4Transform.rotateAroundX(degree));
@@ -156,7 +165,7 @@ public class Arty_GLEventListener implements GLEventListener {
 	pinkief2Rotate.update();	
 	pinkief3Rotate.update();	 
   }
-  private void curlRing(int degree) {
+  private void curlRing(float degree) {
 	ringf1Rotate.setTransform(Mat4Transform.rotateAroundX(degree));
 	ringf2Rotate.setTransform(Mat4Transform.rotateAroundX(degree));
 	ringf3Rotate.setTransform(Mat4Transform.rotateAroundX(degree));
@@ -164,7 +173,7 @@ public class Arty_GLEventListener implements GLEventListener {
 	ringf2Rotate.update();	
 	ringf3Rotate.update();	 
   }
-  private void curlMiddle(int degree) {
+  private void curlMiddle(float degree) {
 	middlef1Rotate.setTransform(Mat4Transform.rotateAroundX(degree));
 	middlef2Rotate.setTransform(Mat4Transform.rotateAroundX(degree));
 	middlef3Rotate.setTransform(Mat4Transform.rotateAroundX(degree));
@@ -172,7 +181,7 @@ public class Arty_GLEventListener implements GLEventListener {
 	middlef2Rotate.update();	
 	middlef3Rotate.update();	 
   }
-  private void curlIndex(int degree) {
+  private void curlIndex(float degree) {
 	indexf1Rotate.setTransform(Mat4Transform.rotateAroundX(degree));
 	indexf2Rotate.setTransform(Mat4Transform.rotateAroundX(degree));
 	indexf3Rotate.setTransform(Mat4Transform.rotateAroundX(degree));
@@ -181,7 +190,7 @@ public class Arty_GLEventListener implements GLEventListener {
 	indexf3Rotate.update();	 
   }
   //only curls last two segments because of different axis
-  private void curlThumb(int degree) {
+  private void curlThumb(float degree) {
 	thumb2Rotate.setTransform(Mat4Transform.rotateAroundZ(degree));
 	thumb3Rotate.setTransform(Mat4Transform.rotateAroundZ(degree));
 	thumb2Rotate.update();	
@@ -211,8 +220,8 @@ public class Arty_GLEventListener implements GLEventListener {
 
   private Camera camera;
   private Mat4 perspective;
-  private Mesh floor, wall1, wall2, wall3, wall4, ceiling, cube, cube2;
-  private Light light;
+  private Mesh floor, wallwb, wallwsl, wallwsr, wallwt, wall2, wall3, wall4, lamp, lamp2, lampb, lamp2b, ceiling, cube;
+  private Light light, lampLight, lampLightb;
   private SGNode exhibit;
  
   //adding some transform nodes for finger rotations
@@ -225,26 +234,51 @@ public class Arty_GLEventListener implements GLEventListener {
   private void initialise(GL3 gl) {
     createRandomNumbers();
     int[] textureId0 = TextureLibrary.loadTexture(gl, "textures/floor.jpg");
-    int[] textureId1 = TextureLibrary.loadTexture(gl, "textures/darkwood1_specular.jpg");
-	int[] textureId2 = TextureLibrary.loadTexture(gl, "textures/wall.jpg");
-    int[] textureId3 = TextureLibrary.loadTexture(gl, "textures/metal.jpg");
-    int[] textureId4 = TextureLibrary.loadTexture(gl, "textures/metal_specular.jpg");
-    int[] textureId5 = TextureLibrary.loadTexture(gl, "textures/ceiling.jpg");
+	int[] textureId1 = TextureLibrary.loadTexture(gl, "textures/wall.jpg");
+    int[] textureId2 = TextureLibrary.loadTexture(gl, "textures/metal.jpg");
+    int[] textureId3 = TextureLibrary.loadTexture(gl, "textures/metal_specular.jpg");
+    int[] textureId4 = TextureLibrary.loadTexture(gl, "textures/ceiling.jpg");
+	int[] textureId5 = TextureLibrary.loadTexture(gl, "textures/jade.jpg");
+	int[] textureId6 = TextureLibrary.loadTexture(gl, "textures/jade_specular.jpg");
+	int[] textureIdwb = TextureLibrary.loadTexture(gl, "textures/wallbottom.jpg");
+	int[] textureIdwt = TextureLibrary.loadTexture(gl, "textures/walltop.jpg");
+	int[] textureIdws = TextureLibrary.loadTexture(gl, "textures/wallside.jpg");
 	
-	
+	lamp = new Cube(gl, textureId2, textureId3);
+	lamp2 = new Sphere(gl, textureId5, textureId6);
+	lampb = new Cube(gl, textureId2, textureId3);
+	lamp2b = new Sphere(gl, textureId5, textureId6);
     floor = new TwoTriangles(gl, textureId0);
     floor.setModelMatrix(Mat4Transform.scale(35,1,35));   
-	wall1 = new TwoTriangles(gl, textureId2);
-	wall2 = new TwoTriangles(gl, textureId2);
-	wall3 = new TwoTriangles(gl, textureId2);
-	wall4 = new TwoTriangles(gl, textureId2);
-	ceiling = new TwoTriangles(gl, textureId5);
+	wallwb = new TwoTriangles(gl, textureIdwb);
+	wallwsl = new TwoTriangles(gl, textureIdws);
+	wallwsr = new TwoTriangles(gl, textureIdws);
+	wallwt = new TwoTriangles(gl, textureIdwt);
+	wall2 = new TwoTriangles(gl, textureId1);
+	wall3 = new TwoTriangles(gl, textureId1);
+	wall4 = new TwoTriangles(gl, textureId1);
+	ceiling = new TwoTriangles(gl, textureId4);
    
 	//wall transformations
-	Mat4 n = Mat4Transform.scale(35,20,35);
+	Mat4 n = Mat4Transform.scale(35,7.8f,35);
     n = Mat4.multiply(n, Mat4Transform.translate(0,0.5f,-0.5f));
     n = Mat4.multiply(n, Mat4Transform.rotateAroundX(90));
-	wall1.setModelMatrix(n);  
+	wallwb.setModelMatrix(n);  
+	n = new Mat4(1);
+	n = Mat4Transform.scale(10,6.1f,10f);
+    n = Mat4.multiply(n, Mat4Transform.translate(-1.25f,1.75f,-1.75f));
+	n = Mat4.multiply(n, Mat4Transform.rotateAroundX(90));
+	wallwsl.setModelMatrix(n);
+	n = new Mat4(1);
+	n = Mat4Transform.scale(10,6.1f,10f);
+    n = Mat4.multiply(n, Mat4Transform.translate(1.25f,1.75f,-1.75f));
+	n = Mat4.multiply(n, Mat4Transform.rotateAroundX(90));
+	wallwsr.setModelMatrix(n);
+	n = new Mat4(1);
+	n = Mat4Transform.scale(35,6.28f,35);
+	n = Mat4.multiply(n, Mat4Transform.translate(0,2.685f,-0.5f));
+    n = Mat4.multiply(n, Mat4Transform.rotateAroundX(90));
+	wallwt.setModelMatrix(n);  
 	n = new Mat4(1);
 	n = Mat4Transform.scale(35,20,35);
     n = Mat4.multiply(n, Mat4Transform.translate(0.5f,0.5f,0));
@@ -268,15 +302,48 @@ public class Arty_GLEventListener implements GLEventListener {
     n = Mat4.multiply(n, Mat4Transform.translate(0,1f,0));
 	n = Mat4.multiply(n, Mat4Transform.rotateAroundX(180));
 	ceiling.setModelMatrix(n);
+	n = new Mat4(1);
+	n = Mat4Transform.scale(0.5f,9.5f,0.5f);
+    n = Mat4.multiply(n, Mat4Transform.translate(-30,0.5f,-30));
+	lamp.setModelMatrix(n);
+	n = new Mat4(1);
+	n = Mat4Transform.scale(1,1,1);
+    n = Mat4.multiply(n, Mat4Transform.translate(-15,9.8f,-15));
+	lamp2.setModelMatrix(n);
+	n = new Mat4(1);
+	n = Mat4Transform.scale(0.5f,9.5f,0.5f);
+    n = Mat4.multiply(n, Mat4Transform.translate(30,0.5f,-30));
+	lampb.setModelMatrix(n);
+	n = new Mat4(1);
+	n = Mat4Transform.scale(1,1,1);
+    n = Mat4.multiply(n, Mat4Transform.translate(15,9.8f,-15));
+	lamp2b.setModelMatrix(n);
 	
     cube = new Cube(gl, textureId3, textureId4);
     light = new Light(gl);
+	lampLight = new Light(gl);
+	lampLightb = new Light(gl);
     light.setCamera(camera);
-    
+	lampLight.setCamera(camera);
+	lampLightb.setCamera(camera);
+    lamp.setLight(light);
+    lamp.setCamera(camera);
+	lamp2.setLight(light);
+    lamp2.setCamera(camera);
+	lampb.setLight(light);
+    lampb.setCamera(camera);
+	lamp2b.setLight(light);
+    lamp2b.setCamera(camera);
     floor.setLight(light);
     floor.setCamera(camera);
-	wall1.setLight(light);
-	wall1.setCamera(camera);
+	wallwb.setLight(light);
+	wallwb.setCamera(camera);
+	wallwsl.setLight(light);
+	wallwsl.setCamera(camera);
+	wallwsr.setLight(light);
+	wallwsr.setCamera(camera);
+	wallwt.setLight(light);
+	wallwt.setCamera(camera);
 	wall2.setLight(light);
 	wall2.setCamera(camera);
 	wall3.setLight(light);
@@ -286,9 +353,7 @@ public class Arty_GLEventListener implements GLEventListener {
 	ceiling.setLight(light);
 	ceiling.setCamera(camera);
     cube.setLight(light);
-    cube.setCamera(camera);  
-    cube2.setLight(light);
-    cube2.setCamera(camera);  
+    cube.setCamera(camera);   
 	
 	// make nodes
     MeshNode podiumShape = new MeshNode("Cube(podium)", cube);
@@ -569,33 +634,80 @@ public class Arty_GLEventListener implements GLEventListener {
 						thumb3Transform.addChild(thumbShape3);
           
     
-    exhibit.update();  // IMPORTANT - don't forget this
-    //robot.print(0, false);
-    //System.exit(0);
+    exhibit.update();
   }
   
   private void render(GL3 gl) {
     gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
     updatePerspectiveMatrices();
     
-    light.setPosition(getLightPosition());  // changing light position each frame
+    light.setPosition(0, 20f, 0);
     light.render(gl);
-	wall1.render(gl);
+	lampLight.setPosition(-15f, 10f, -15f);
+    lampLight.render(gl);
+	lampLightb.setPosition(15f, 10f, -15f);
+    lampLightb.render(gl);
+	lamp.render(gl);
+	lamp2.render(gl);
+	lampb.render(gl);
+	lamp2b.render(gl);
+	wallwb.render(gl);
+	wallwsl.render(gl);
+	wallwsr.render(gl);
+	wallwt.render(gl);
 	wall2.render(gl);
 	wall3.render(gl);
 	wall4.render(gl);
     floor.render(gl); 
 	ceiling.render(gl);
     
+	if (animation) updateHand();
+	
     exhibit.draw(gl);
   }
+  
+  //timer for running through each animation in a loop
+  private float timecounter = 0;
+  
+  private void updateHand(){
+	//reset hand first to avoid errors in transformations
+	reset();
+	double elapsedTime = getSeconds()-startTime-timecounter;
+    float rotateAngle = 90f*(float)Math.pow(Math.sin(elapsedTime), 2);
+ 
+	//checks to decide which gesture is being performed
+	if (elapsedTime > 12.5){timecounter += 12.5;}
+	
+	if (elapsedTime < 3.1){
+		Vpos(rotateAngle);
+	}
+    if (elapsedTime > 3.1 && elapsedTime < 6.2){
+		Ipos(rotateAngle);
+	}
+	if (elapsedTime > 6.2 && elapsedTime < 9.35){
+		Gpos(rotateAngle);
+	}
+	if (elapsedTime > 9.35 && elapsedTime < 12.5){
+		salute(rotateAngle*0.3f);
+	}
+  }
+  
   
   private void updatePerspectiveMatrices() {
     // needs to be changed if user resizes the window
     perspective = Mat4Transform.perspective(45, aspect);
     light.setPerspective(perspective);
+	lampLight.setPerspective(perspective);
+	lamp.setPerspective(perspective);
+	lamp2.setPerspective(perspective);
+	lampLightb.setPerspective(perspective);
+	lampb.setPerspective(perspective);
+	lamp2b.setPerspective(perspective);
     floor.setPerspective(perspective);
-	wall1.setPerspective(perspective);
+	wallwb.setPerspective(perspective);
+	wallwsl.setPerspective(perspective);
+	wallwsr.setPerspective(perspective);
+	wallwt.setPerspective(perspective);
 	wall2.setPerspective(perspective);
 	wall3.setPerspective(perspective);
 	wall4.setPerspective(perspective);
@@ -605,8 +717,17 @@ public class Arty_GLEventListener implements GLEventListener {
   
   private void disposeMeshes(GL3 gl) {
     light.dispose(gl);
+	lampLight.dispose(gl);
+	lamp.dispose(gl);
+	lamp2.dispose(gl);
+	lampLightb.dispose(gl);
+	lampb.dispose(gl);
+	lamp2b.dispose(gl);
     floor.dispose(gl);
-	wall1.dispose(gl);
+	wallwb.dispose(gl);
+	wallwsl.dispose(gl);
+	wallwsr.dispose(gl);
+	wallwt.dispose(gl);
 	wall2.dispose(gl);
 	wall3.dispose(gl);
 	wall4.dispose(gl);
@@ -616,13 +737,12 @@ public class Arty_GLEventListener implements GLEventListener {
   
   
   // The light's postion is continually being changed, so needs to be calculated for each frame.
-  private Vec3 getLightPosition() {
-    double elapsedTime = getSeconds()-startTime;
-    float x = 0;  //*(float)(Math.sin(Math.toRadians(elapsedTime*50)));
-    float y = 20f;
-    float z = 0;  //*(float)(Math.cos(Math.toRadians(elapsedTime*50)));
-    return new Vec3(x,y,z);   
-    //return new Vec3(5f,3.4f,5f);
-  }
+  // private Vec3 getLightPosition() {
+    // double elapsedTime = getSeconds()-startTime;
+    // float x = 0;
+    // float y = 20f;
+    // float z = 0;
+    // return new Vec3(x,y,z);   
+  // }
   
 }
