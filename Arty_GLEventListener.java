@@ -220,7 +220,8 @@ public class Arty_GLEventListener implements GLEventListener {
 
   private Camera camera;
   private Mat4 perspective;
-  private Mesh floor, wallwb, wallwsl, wallwsr, wallwt, wall2, wall3, wall4, lamp, lamp2, lampb, lamp2b, ceiling, cube;
+  private Mesh floor, wallwb, wallwsl, wallwsr, wallwt, wall2, wall3, wall4, 
+				window, painting1, painting2, lamp, lamp2, lampb, lamp2b, ceiling, cube;
   private Light light, lampLight, lampLightb;
   private SGNode exhibit;
  
@@ -243,6 +244,9 @@ public class Arty_GLEventListener implements GLEventListener {
 	int[] textureIdwb = TextureLibrary.loadTexture(gl, "textures/wallbottom.jpg");
 	int[] textureIdwt = TextureLibrary.loadTexture(gl, "textures/walltop.jpg");
 	int[] textureIdws = TextureLibrary.loadTexture(gl, "textures/wallside.jpg");
+	int[] textureIdp1 = TextureLibrary.loadTexture(gl, "textures/painting1.jpg");
+	int[] textureIdp2 = TextureLibrary.loadTexture(gl, "textures/painting2.jpg");
+	int[] textureIdw = TextureLibrary.loadTexture(gl, "textures/cityscape.jpeg");
 	
 	lamp = new Cube(gl, textureId2, textureId3);
 	lamp2 = new Sphere(gl, textureId5, textureId6);
@@ -258,6 +262,9 @@ public class Arty_GLEventListener implements GLEventListener {
 	wall3 = new TwoTriangles(gl, textureId1);
 	wall4 = new TwoTriangles(gl, textureId1);
 	ceiling = new TwoTriangles(gl, textureId4);
+	painting1 = new TwoTriangles(gl, textureIdp1);
+	painting2 = new TwoTriangles(gl, textureIdp2);
+	window = new TwoTriangles(gl, textureIdw);
    
 	//wall transformations
 	Mat4 n = Mat4Transform.scale(35,7.8f,35);
@@ -265,12 +272,12 @@ public class Arty_GLEventListener implements GLEventListener {
     n = Mat4.multiply(n, Mat4Transform.rotateAroundX(90));
 	wallwb.setModelMatrix(n);  
 	n = new Mat4(1);
-	n = Mat4Transform.scale(10,6.1f,10f);
+	n = Mat4Transform.scale(10,6.15f,10f);
     n = Mat4.multiply(n, Mat4Transform.translate(-1.25f,1.75f,-1.75f));
 	n = Mat4.multiply(n, Mat4Transform.rotateAroundX(90));
 	wallwsl.setModelMatrix(n);
 	n = new Mat4(1);
-	n = Mat4Transform.scale(10,6.1f,10f);
+	n = Mat4Transform.scale(10,6.15f,10f);
     n = Mat4.multiply(n, Mat4Transform.translate(1.25f,1.75f,-1.75f));
 	n = Mat4.multiply(n, Mat4Transform.rotateAroundX(90));
 	wallwsr.setModelMatrix(n);
@@ -278,7 +285,24 @@ public class Arty_GLEventListener implements GLEventListener {
 	n = Mat4Transform.scale(35,6.28f,35);
 	n = Mat4.multiply(n, Mat4Transform.translate(0,2.685f,-0.5f));
     n = Mat4.multiply(n, Mat4Transform.rotateAroundX(90));
-	wallwt.setModelMatrix(n);  
+	wallwt.setModelMatrix(n);
+	n = new Mat4(1);
+	n = Mat4Transform.scale(100,40,100);
+    n = Mat4.multiply(n, Mat4Transform.translate(0,0.3f,-0.5f));
+	n = Mat4.multiply(n, Mat4Transform.rotateAroundX(90));
+	window.setModelMatrix(n);	
+	n = new Mat4(1);
+	n = Mat4Transform.scale(6,7,6);
+    n = Mat4.multiply(n, Mat4Transform.translate(2.9f,1.25f,0));
+	n = Mat4.multiply(n, Mat4Transform.rotateAroundX(90));
+	n = Mat4.multiply(n, Mat4Transform.rotateAroundZ(90));
+	painting1.setModelMatrix(n);
+	n = new Mat4(1);
+	n = Mat4Transform.scale(6,7,6);
+    n = Mat4.multiply(n, Mat4Transform.translate(-2.9f,1.25f,0));
+	n = Mat4.multiply(n, Mat4Transform.rotateAroundX(90));
+	n = Mat4.multiply(n, Mat4Transform.rotateAroundZ(-90));
+	painting2.setModelMatrix(n);
 	n = new Mat4(1);
 	n = Mat4Transform.scale(35,20,35);
     n = Mat4.multiply(n, Mat4Transform.translate(0.5f,0.5f,0));
@@ -344,12 +368,18 @@ public class Arty_GLEventListener implements GLEventListener {
 	wallwsr.setCamera(camera);
 	wallwt.setLight(light);
 	wallwt.setCamera(camera);
+	window.setLight(light);
+	window.setCamera(camera);
 	wall2.setLight(light);
 	wall2.setCamera(camera);
 	wall3.setLight(light);
 	wall3.setCamera(camera);
 	wall4.setLight(light);
 	wall4.setCamera(camera);
+	painting1.setLight(light);
+	painting1.setCamera(camera);
+	painting2.setLight(light);
+	painting2.setCamera(camera);
 	ceiling.setLight(light);
 	ceiling.setCamera(camera);
     cube.setLight(light);
@@ -655,9 +685,12 @@ public class Arty_GLEventListener implements GLEventListener {
 	wallwsl.render(gl);
 	wallwsr.render(gl);
 	wallwt.render(gl);
+	window.render(gl);
 	wall2.render(gl);
 	wall3.render(gl);
 	wall4.render(gl);
+	painting1.render(gl);
+	painting2.render(gl);
     floor.render(gl); 
 	ceiling.render(gl);
     
@@ -708,9 +741,12 @@ public class Arty_GLEventListener implements GLEventListener {
 	wallwsl.setPerspective(perspective);
 	wallwsr.setPerspective(perspective);
 	wallwt.setPerspective(perspective);
+	window.setPerspective(perspective);
 	wall2.setPerspective(perspective);
 	wall3.setPerspective(perspective);
 	wall4.setPerspective(perspective);
+	painting1.setPerspective(perspective);
+	painting2.setPerspective(perspective);
 	ceiling.setPerspective(perspective);
     cube.setPerspective(perspective);
   }
@@ -728,21 +764,14 @@ public class Arty_GLEventListener implements GLEventListener {
 	wallwsl.dispose(gl);
 	wallwsr.dispose(gl);
 	wallwt.dispose(gl);
+	window.dispose(gl);
 	wall2.dispose(gl);
 	wall3.dispose(gl);
 	wall4.dispose(gl);
+	painting1.dispose(gl);
+	painting2.dispose(gl);
 	ceiling.dispose(gl);
     cube.dispose(gl);
   }
-  
-  
-  // The light's postion is continually being changed, so needs to be calculated for each frame.
-  // private Vec3 getLightPosition() {
-    // double elapsedTime = getSeconds()-startTime;
-    // float x = 0;
-    // float y = 20f;
-    // float z = 0;
-    // return new Vec3(x,y,z);   
-  // }
   
 }
